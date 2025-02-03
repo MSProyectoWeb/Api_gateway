@@ -7,6 +7,7 @@ COPY package*.json ./
 
 RUN npm install --legacy-peer-deps
 RUN npm install @nestjs/config --legacy-peer-deps
+RUN npm install @nestjs/passport passport passport-jwt @nestjs/jwt --force or --legacy-peer-deps
 
 COPY . .
 

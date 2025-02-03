@@ -8,10 +8,12 @@ import {
     ParseIntPipe, 
     Patch, 
     Query,
-    Inject 
+    Inject, 
+    UseGuards
   } from '@nestjs/common';
   import { ClientProxy } from '@nestjs/microservices';
   import { firstValueFrom } from 'rxjs';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
   
   @Controller('subscriptions')
   export class SubscriptionsController {
@@ -27,6 +29,7 @@ import {
     }
   
     @Get()
+    @UseGuards(JwtAuthGuard)
     async findAll() {
       return firstValueFrom(
         this.usersClient.send({ cmd: 'find_all_subscriptions' }, {})
@@ -34,6 +37,7 @@ import {
     }
   
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async findOne(@Param('id', ParseIntPipe) id: number) {
       return firstValueFrom(
         this.usersClient.send({ cmd: 'find_one_subscription' }, { id })
@@ -41,6 +45,7 @@ import {
     }
   
     @Get('user/:userId')
+    @UseGuards(JwtAuthGuard)
     async findByUserId(@Param('userId', ParseIntPipe) userId: number) {
       return firstValueFrom(
         this.usersClient.send(
@@ -51,6 +56,7 @@ import {
     }
   
     @Delete(':id')
+    @UseGuards(JwtAuthGuard)
     async remove(@Param('id', ParseIntPipe) id: number) {
       return firstValueFrom(
         this.usersClient.send({ cmd: 'delete_subscription' }, { id })
@@ -58,6 +64,7 @@ import {
     }
   
     @Patch(':id/renovar')
+    @UseGuards(JwtAuthGuard)
     async renovar(
       @Param('id', ParseIntPipe) id: number,
       @Query('tipoSuscripcion') tipoSuscripcion: any,

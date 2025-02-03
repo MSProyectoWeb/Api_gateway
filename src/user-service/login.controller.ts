@@ -6,6 +6,7 @@ import {
     HttpException,
     HttpStatus 
   } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
   import { ClientProxy } from '@nestjs/microservices';
   import { firstValueFrom } from 'rxjs';
 
@@ -13,17 +14,15 @@ import {
   @Controller('login')
   export class LoginController {
     constructor(
-      @Inject('USERS_SERVICE') private readonly usersClient: ClientProxy
+      @Inject('USERS_SERVICE') private readonly usersClient: ClientProxy,
+      private jwtService: JwtService
     ) {}
   
     @Post()
     async login(@Body() loginDto: any) {
       try {
         const response = await firstValueFrom(
-          this.usersClient.send(
-            { cmd: 'validate_user' }, 
-            loginDto
-          )
+          this.usersClient.send({ cmd: 'validate_user' }, loginDto)
         );
   
         if (response.status === 'error') {
@@ -31,9 +30,13 @@ import {
             response.message,
             response.statusCode || HttpStatus.UNAUTHORIZED
           );
+        }else{
+          const payload = { username: response.username, sub: response.userId };
+          return {
+            user: response.user,
+            access_token: this.jwtService.sign(payload),
+          };
         }
-  
-        return response;
       } catch (error) {
         throw new HttpException(
           error.message || 'Error en el proceso de login',

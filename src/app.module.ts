@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ChatGatewayModule } from './chat-gateway/chat-gateway.module';
 import { UserModule } from './user-service/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
     // Otros módulos...
     ChatGatewayModule,
     UserModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

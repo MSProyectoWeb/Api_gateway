@@ -1,7 +1,8 @@
 // api-gateway/src/user-service/user.controller.ts
-import { Controller, Get, Post, Put, Delete, Body, Param, Inject, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Inject, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -25,6 +26,7 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findAll() {
     return firstValueFrom(
       this.usersClient.send({ cmd: 'get_usuarios' }, {})
@@ -32,6 +34,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return firstValueFrom(
       this.usersClient.send({ cmd: 'get_user_by_id' }, { id })
@@ -39,6 +42,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: any) {
     return firstValueFrom(
       this.usersClient.send({ cmd: 'update_user' }, { id, updateUserDto })
@@ -46,16 +50,10 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id', ParseIntPipe) id: number) {
     return firstValueFrom(
       this.usersClient.send({ cmd: 'delete_user' }, { id })
-    );
-  }
-
-  @Put('update-password')
-  async updatePassword(@Body() body: { correo: string; newPassword: string }) {
-    return firstValueFrom(
-      this.usersClient.send({ cmd: 'update_user_password' }, body)
     );
   }
 }

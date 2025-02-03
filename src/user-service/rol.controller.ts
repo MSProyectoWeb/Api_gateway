@@ -7,12 +7,15 @@ import {
     Body, 
     Param, 
     Inject,
-    ParseIntPipe 
+    ParseIntPipe, 
+    UseGuards
   } from '@nestjs/common';
   import { ClientProxy } from '@nestjs/microservices';
   import { firstValueFrom } from 'rxjs';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
   
   @Controller('roles')
+  @UseGuards(JwtAuthGuard)
   export class RolesController {
     constructor(
       @Inject('USERS_SERVICE') private readonly usersClient: ClientProxy

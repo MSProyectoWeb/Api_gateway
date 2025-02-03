@@ -5,6 +5,7 @@ import { SubscriptionsController } from './suscription.controller';
 import { RolesController } from './rol.controller';
 import { RecuperarPasswordController } from './recuperarPsw.controller';
 import { LoginController } from './login.controller';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { LoginController } from './login.controller';
         },
       },
     ]),
+    AuthModule
   ],
   controllers: [UserController, SubscriptionsController, RolesController, RecuperarPasswordController, LoginController]
 })
