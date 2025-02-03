@@ -10,7 +10,7 @@ import { ChatController } from './chat-gateway.controller';
         name: 'CHAT_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://user:password@rabbitmq:5672'],
+          urls: ['amqp://user:password@localhost:5672'],
           queue: 'chat_queue',
           queueOptions: { durable: false },
         },

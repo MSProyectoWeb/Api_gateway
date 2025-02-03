@@ -13,7 +13,7 @@ import { LoginController } from './login.controller';
         name: 'USERS_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://user:password@rabbitmq:5672'],
+          urls: ['amqp://user:password@localhost:5672'],
           queue: 'users_queue',
           queueOptions: {
             durable: false,  // Cambiado a false para mantener consistencia
